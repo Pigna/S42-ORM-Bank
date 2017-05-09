@@ -15,6 +15,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
+import util.DatabaseCleaner;
 
 /**
  *
@@ -23,10 +24,25 @@ import org.junit.Test;
 public class opdracht1test {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("bankPU");
     EntityManager em = emf.createEntityManager();
+    DatabaseCleaner dbCleaner = new DatabaseCleaner(em); 
     
+    public void ClearDB()
+    {
+        try
+        {
+            dbCleaner.clean();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error in db cleaner: " + e.getMessage());
+        }
+    }
     @Test
     public void PersistCommit()
     {
+        ClearDB();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("bankPU");
+        EntityManager em = emf.createEntityManager();
         Account account = new Account(111L);
         em.getTransaction().begin();
         em.persist(account);
@@ -45,6 +61,9 @@ public class opdracht1test {
     @Test
     public void Rollback()
     {
+        ClearDB();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("bankPU");
+        EntityManager em = emf.createEntityManager();
         Account account = new Account(111L);
         em.getTransaction().begin();
         em.persist(account);
@@ -56,6 +75,9 @@ public class opdracht1test {
     @Test
     public void Flushen()
     {
+        ClearDB();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("bankPU");
+        EntityManager em = emf.createEntityManager();
         Long expected = -100L;
         Account account = new Account(111L);
         account.setId(expected);
@@ -73,6 +95,9 @@ public class opdracht1test {
     @Test
     public void VeranderingenPersist()
     {
+        ClearDB();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("bankPU");
+        EntityManager em = emf.createEntityManager();
         Long expectedBalance = 400L;
         Account account = new Account(114L);
         em.getTransaction().begin();
@@ -98,6 +123,9 @@ public class opdracht1test {
     @Test
     public void Merge1()
     {
+        ClearDB();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("bankPU");
+        EntityManager em = emf.createEntityManager();
         //Merge is een van de lastigere methoden uit JPA api. Het is belangrijk dat je deze opgave daarom zorgvuldig uitvoert.
         // scenario 1
         Long balance1 = 100L;
@@ -112,6 +140,9 @@ public class opdracht1test {
     @Test
     public void Merge2()
     {
+        ClearDB();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("bankPU");
+        EntityManager em = emf.createEntityManager();
         // scenario 2
         Long balance2a = 211L;
         acc = new Account(2L);
@@ -128,6 +159,9 @@ public class opdracht1test {
     @Test
     public void Merge3()
     {
+        ClearDB();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("bankPU");
+        EntityManager em = emf.createEntityManager();
         // scenario 3
         Long balance3b = 322L;
         Long balance3c = 333L;
@@ -147,6 +181,8 @@ public class opdracht1test {
     @Test
     public void Merge4()
     {
+        ClearDB();
+        
         // scenario 4
         Account account = new Account(114L) ;
         account.setBalance(450L) ;
@@ -177,6 +213,10 @@ public class opdracht1test {
     @Test
     public void FindClear1()
     {
+        ClearDB();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("bankPU");
+        EntityManager em = emf.createEntityManager();
+        
         Account acc1 = new Account(77L);
         em.getTransaction().begin();
         em.persist(acc1);
@@ -193,6 +233,9 @@ public class opdracht1test {
     @Test
     public void FindClear2()
     {
+        ClearDB();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("bankPU");
+        EntityManager em = emf.createEntityManager();
         // scenario 2        
         accF1 = em.find(Account.class, acc.getId());//was acc1
         em.clear();
@@ -204,6 +247,10 @@ public class opdracht1test {
     @Test
     public void Remove()
     {
+        ClearDB();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("bankPU");
+        EntityManager em = emf.createEntityManager();
+        
         Account acc1 = new Account(88L);
         em.getTransaction().begin();
         em.persist(acc1);
